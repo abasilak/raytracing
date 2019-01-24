@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
     srand48(time(NULL));
 
 // Camera
-    const Vec3  _origin = Vec3(10.0f,  7.0f, 20.0f);
+    const Vec3  _origin = Vec3(13.0f,  4.0f,  4.0f);
     const Vec3  _lookat = Vec3( 0.0f,  0.0f,  0.0f);
     const Vec3  _up     = Vec3( 0.0f,  1.0f,  0.0f);
     const float _fov    = 20.0f;
@@ -52,11 +52,21 @@ int main (int argc, char *argv[])
     std::cout << "\nRay Tracing Progress" << std::endl;
 
 // For each pixel
-    double pr = 0.0;
+    float _progress_i     = 0.0f;
+    float _progress_total = _width*_height;
+
+    Vec3 **_colors = new Vec3 *[_width];
+    for(int i=0; i<_width; ++i) {
+        _colors[i] = new Vec3[_height];
+    }
+
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2)
+#endif
     for(int j=_height-1; j>=0; --j) {
         for(int i=0; i<_width; ++i) {
             
-            Vec3 _color(0.0f,0.0f,0.0f);
+            _colors[i][j] = Vec3(0.0f,0.0f,0.0f);
             for(int s=0; s<_samples; ++s) {
 
 // Compute pixel sample coords - UV
@@ -67,19 +77,20 @@ int main (int argc, char *argv[])
                 Ray  _ray = _camera.GetRay(_u, _v);
 
 // Compute pixel sample color
-                _color += compute_sample_color(_ray, _objects_list, 0);
+                _colors[i][j] += compute_sample_color(_ray, _objects_list, 0);
             }
-            _color /= static_cast<float>(_samples);
+// Compute sample-averaged pixel color
+            _colors[i][j] /= static_cast<float>(_samples);
 
 // Gamma Correction
-            _color = compute_gamma_corrected_color(_color, _gamma);
+            _colors[i][j] = compute_gamma_corrected_color(_colors[i][j], _gamma);
 
-// Write pixel color to image file
-            _image->WritePixel2File(_color);
-
-            printProgress(pr++/(_width*_height));
+            printProgress(++_progress_i/_progress_total);
         }
     }
+
+    // Write pixel color to image file
+    _image->WritePixel2File(_colors);
 
 #ifdef EXECUTION_TIME_COMPUTATION
     auto stop     = high_resolution_clock::now();
@@ -97,8 +108,12 @@ int main (int argc, char *argv[])
     _image->CloseFile();
     
     safe_delete(_image);
-    
     safe_delete(_objects_list);
+    
+    for(int i=0; i<_width; ++i) {
+        safe_array_delete(_colors[i]);
+    }
+    safe_array_delete(_colors);
 
     return 0;
 }

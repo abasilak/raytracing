@@ -29,13 +29,19 @@ Image2D::InitFile(void)
 }
 
 void
-Image2D::WritePixel2File(const Vec3& color)
+Image2D::WritePixel2File(Vec3 **colors)
 {
-    int r = int (255.99 *color[0]);
-    int g = int (255.99 *color[1]);
-    int b = int (255.99 *color[2]);
+    for(int j=m_height-1; j>=0; --j) {
+        for(int i=0; i<m_width; ++i) {
 
-    m_image << r << " " << g << " " << b << "\n";
+            Vec3 color = colors[i][j];
+            int r = int (255.99 * color[0]);
+            int g = int (255.99 * color[1]);
+            int b = int (255.99 * color[2]);
+
+            m_image << r << " " << g << " " << b << "\n";
+        }
+    }
 }
 
 void

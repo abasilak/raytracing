@@ -22,7 +22,7 @@ public:
 
     bool     OpenFile(void);
     void     InitFile(void);
-    void     WritePixel2File(const Vec3& color);
+    void     WritePixel2File(Vec3 **colors);
     void     CloseFile(void);
 };
 

@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #ifdef EXECUTION_TIME_COMPUTATION
 #include <chrono> 
 using namespace std::chrono; 
