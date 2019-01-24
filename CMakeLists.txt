@@ -15,6 +15,7 @@ add_definitions(-DEXECUTION_TIME_COMPUTATION)
 add_executable(RayTracing
                Vec3.cpp
                RayTracing.cpp
+               Scene.cpp
                Image2D.cpp
                Camera.cpp
                Sphere.cpp

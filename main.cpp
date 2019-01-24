@@ -1,12 +1,12 @@
 #include "RayTracing.h"
 #include "Sphere.h"
 #include "Camera.h"
-#include "ObjectList.h"
+#include "Scene.h"
 #include "Image2D.h"
 #include "Utils.h"
 
 ObjectList *
-create_random_scene(Object **objects, int objects_size, Material **materials, int materials_size)
+Create(Object **objects, int objects_size, Material **materials, int materials_size)
 {
     int i = 0;
     for (int a = -11; a < 11; a++) {
@@ -91,26 +91,16 @@ int main (int argc, char *argv[])
     const Vec3  _lookat = Vec3( 0.0f,  0.0f,  0.0f);
     const Vec3  _up     = Vec3( 0.0f,  1.0f,  0.0f);
     const float _fov    = 20.0f;
-    const float _aspect = _width / (float)_height;
+    const float _aspect = static_cast<float>(_width) / static_cast<float>(_height);
     const float _aperture       = 0.1f;
     const float _focus_distance = (_origin - _lookat).length();
 
     Camera _camera(_origin, _lookat, _up, _fov, _aspect, _aperture, _focus_distance);
 
 // Scene
-    const int       _materials_size = 500;
-    Material      **_materials      = new Material *[_materials_size];
-    for(int i=0; i<_materials_size; ++i) {
-        _materials[i] = nullptr;
-    }
+    Scene  _scene(500,500);
 
-    const int       _objects_size = 500;
-    Object        **_objects      = new Object *[_objects_size];
-    for(int i=0; i<_objects_size; ++i) {
-        _objects[i] = nullptr;
-    }
-
-    ObjectList     *_objects_list = create_random_scene(_objects, _objects_size, _materials, _materials_size);
+    ObjectList     *_objects_list = _scene.Create();
 
 // Post-Processing
     const float _gamma = 0.5f;
@@ -130,8 +120,8 @@ int main (int argc, char *argv[])
             for(int s=0; s<_samples; ++s) {
 
 // Compute pixel sample coords - UV
-                float _u = float(i + drand48()) / float(_width );
-                float _v = float(j + drand48()) / float(_height);
+                float _u = static_cast<float>(i + drand48()) / static_cast<float>(_width );
+                float _v = static_cast<float>(j + drand48()) / static_cast<float>(_height);
 
 // Compute ray that pass through each pixel
                 Ray  _ray = _camera.GetRay(_u, _v);
@@ -168,16 +158,6 @@ int main (int argc, char *argv[])
     
     safe_delete(_image);
     
-    for(int i=0; i<_materials_size; ++i) {
-        safe_delete(_materials[i]);
-    }
-    safe_array_delete(_materials);
-
-    for(int i=0; i<_objects_size; ++i) {
-        safe_delete(_objects[i]);
-    }
-    safe_array_delete(_objects);
-
     safe_delete(_objects_list);
 
     return 0;
