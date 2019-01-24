@@ -27,7 +27,7 @@ Lambertian::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuati
 {
     Vec3 _target = hit_record.m_point + hit_record.m_normal + random_in_unit_disk();
 
-    ray_out      = Ray(hit_record.m_point, _target - hit_record.m_point);
+    ray_out      = Ray(hit_record.m_point, _target - hit_record.m_point, ray_in.GetTime());
     attenuation  = m_albedo;
 
     return true;
@@ -37,7 +37,7 @@ bool
 Metal::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const
 {
     Vec3 _reflected = reflect(ray_in.GetDirection(), hit_record.m_normal);
-    ray_out         = Ray(hit_record.m_point, _reflected + m_fuzz*random_in_unit_disk());
+    ray_out         = Ray(hit_record.m_point, _reflected + m_fuzz*random_in_unit_disk(), ray_in.GetTime());
     attenuation     = m_albedo;
 
     return (dot(_reflected, hit_record.m_normal) > 0.0f);
@@ -57,8 +57,7 @@ Dielectric::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuati
     if ((angle = dot(ray_in.GetDirection(), hit_record.m_normal)) > 0.0f) {
         outward_normal = -hit_record.m_normal;
         ni_over_nt     = m_ref_idx;
-//      cosine = ref_idx * dot(r_in.direction(), rec.normal) / r_in.direction().length();
-        cosine = angle / ray_in.GetDirection().length();
+        cosine = angle / ray_in.GetDirection().length(); // cosine *= m_ref_idx;
         cosine = sqrt(1.0f - m_ref_idx*m_ref_idx*(1.0f - cosine*cosine));
     }
     else {
@@ -69,13 +68,12 @@ Dielectric::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuati
 
     Vec3  _refracted;
     float _reflect_prob = 1.0f;
-    if (refract(ray_in.GetDirection(), outward_normal, ni_over_nt, _refracted)) 
+    if (refract(ray_in.GetDirection(), outward_normal, ni_over_nt, _refracted)) {
         _reflect_prob = schlick(cosine, m_ref_idx);
-        
-    if (drand48() < _reflect_prob) 
-        ray_out = Ray(hit_record.m_point, _reflected);
-    else 
-        ray_out = Ray(hit_record.m_point, _refracted);
+    }
 
+    Vec3  _scattered = (drand48() < _reflect_prob) ? _reflected : _refracted;
+    ray_out          = Ray(hit_record.m_point, _scattered, ray_in.GetTime());
+    
     return true;
 }

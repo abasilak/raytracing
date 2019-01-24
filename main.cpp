@@ -27,12 +27,12 @@ int main (int argc, char *argv[])
     srand48(time(NULL));
 
 // Camera
-    const Vec3  _origin = Vec3(10.0f,  10.0f, 20.0f);
+    const Vec3  _origin = Vec3(10.0f,  7.0f, 20.0f);
     const Vec3  _lookat = Vec3( 0.0f,  0.0f,  0.0f);
     const Vec3  _up     = Vec3( 0.0f,  1.0f,  0.0f);
     const float _fov    = 20.0f;
     const float _aspect = static_cast<float>(_width) / static_cast<float>(_height);
-    const float _aperture       = 0.1f;
+    const float _aperture       = 0.0f;
     const float _focus_distance = (_origin - _lookat).length();
 
     Camera _camera(_origin, _lookat, _up, _fov, _aspect, _aperture, _focus_distance);

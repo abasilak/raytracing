@@ -44,26 +44,30 @@ Scene::Create(void)
                 Vec3            _albedo;
                 Material::Type  _material_type;
                 float           _material_type_f = drand48();
+                bool            _animated;
 
                 if (_material_type_f < 0.8f) {
                     _material_type  = Material::Type::lambertian;
                     _albedo         = Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48());
                     _f              = 0.0f;
+                    _animated       = true;
                 }
                 else if (_material_type_f < 0.95f) { 
                     _material_type  = Material::Type::metal;
                     _albedo         = Vec3(0.5f*(1.0f + drand48()), 0.5f*(1.0f + drand48()), 0.5f*(1.0f + drand48()));
                     _f              = 0.5f*drand48();
+                    _animated       = false;
                 }
                 else
                 {
                     _material_type  = Material::Type::dielectric;
                     _albedo         = Vec3(1.0f, 1.0f, 1.0f);
                     _f              = 1.5f;
+                    _animated       = false;
                 }
 
                 m_materials[i] = Material::Create(_material_type, _albedo, _f);
-                m_objects[i]   = new Sphere(_origin, _radius, m_materials[i]);
+                m_objects[i]   = new Sphere(_origin, _radius, m_materials[i], _animated);
                 i++;
             }
         }

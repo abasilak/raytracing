@@ -7,8 +7,8 @@ Camera::Camera(const Vec3& origin, const Vec3& lower_left_corner,const Vec3& hor
 
 }
 
-Camera::Camera(const Vec3& origin, const Vec3& lookat, const Vec3& up, float fov, float aspect, float aperture, float focus_distance)
-: m_origin(origin), m_lens_radius(aperture * 0.5f)
+Camera::Camera(const Vec3& origin, const Vec3& lookat, const Vec3& up, float fov, float aspect, float aperture, float focus_distance, float time_open, float time_close)
+: m_origin(origin), m_lens_radius(aperture * 0.5f), m_time_open(time_open), m_time_close(time_close)
 { 
     float _theta       = degrees_to_radians(fov);
     float _half_height = tan(_theta/2.0f);
@@ -29,9 +29,10 @@ Camera::Camera(const Vec3& origin, const Vec3& lookat, const Vec3& up, float fov
 Ray
 Camera::GetRay(float s, float t) const
 { 
-    Vec3 _rd     = m_lens_radius * random_in_unit_disk();
-    Vec3 _offset = m_u * _rd.x() + m_v * _rd.y();
-    Vec3 _origin = m_origin + _offset;
+    Vec3  _rd     = (m_lens_radius > 0.0f) ? m_lens_radius * random_in_unit_disk() : Vec3(0.0f, 0.0f, 0.0f);
+    Vec3  _offset = m_u * _rd.x() + m_v * _rd.y();
+    Vec3  _origin = m_origin + _offset;
+    float _time   = m_time_open + drand48()*(m_time_close - m_time_open);
 
-    return Ray(_origin, m_lower_left_corner + s*m_horizontal + t*m_vertical - _origin);
+    return Ray(_origin, m_lower_left_corner + s*m_horizontal + t*m_vertical - _origin, _time);
 }
