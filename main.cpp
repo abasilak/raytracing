@@ -5,66 +5,6 @@
 #include "Image2D.h"
 #include "Utils.h"
 
-ObjectList *
-Create(Object **objects, int objects_size, Material **materials, int materials_size)
-{
-    int i = 0;
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
-
-            float _radius = 0.25f*drand48();
-            Vec3  _origin(a + 0.9f*drand48(), _radius, b + 0.9f*drand48()); 
-
-            if ((_origin-Vec3(4.0f, _radius, 0.0f)).length() > 0.9f) {
-                
-                float           _f;
-                Vec3            _albedo;
-                Material::Type  _material_type;
-                float           _material_type_f = drand48();
-
-                if (_material_type_f < 0.8f) {
-                    _material_type  = Material::Type::lambertian;
-                    _albedo         = Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48());
-                    _f              = 0.0f;
-                }
-                else if (_material_type_f < 0.95f) { 
-                    _material_type  = Material::Type::metal;
-                    _albedo         = Vec3(0.5f*(1.0f + drand48()), 0.5f*(1.0f + drand48()), 0.5f*(1.0f + drand48()));
-                    _f              = 0.5f*drand48();
-                }
-                else
-                {
-                    _material_type  = Material::Type::dielectric;
-                    _albedo         = Vec3(1.0f, 1.0f, 1.0f);
-                    _f              = 1.5f;
-                }
-
-                materials[i] = Material::Create(_material_type, _albedo, _f);
-                objects[i]   = new Sphere(_origin, _radius, materials[i]);
-                i++;
-            }
-        }
-    }
-    
-    materials[i] = new Lambertian(Vec3(0.5f,0.5f,0.5f));
-    objects[i]   = new Sphere(Vec3(0.0f,-1000.0f,0.0f), 1000.0f, materials[i]);
-    i++;
-
-    materials[i] = new Dielectric(Vec3(1.0f, 1.0f, 1.0f), 1.5f);
-    objects[i]   = new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0f, materials[i]);
-    i++;
-
-    materials[i] = new Lambertian(Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48()));
-    objects[i]   = new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, materials[i]);
-    i++;
-
-    materials[i] = new Metal(Vec3(0.7f, 0.6f, 0.5f), 0.0f);
-    objects[i]   = new Sphere(Vec3( 4.0f, 1.0f, 0.0f), 1.0f, materials[i]);
-    i++;
-
-    return new ObjectList(objects, i);
-}
-
 int main (int argc, char *argv[])
 {
     if (argc < 5) {
