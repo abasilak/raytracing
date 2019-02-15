@@ -14,7 +14,10 @@ public:
 
     explicit Vec3() {}
     explicit Vec3(float e0, float e1, float e2) { e[0] = e0; e[1] = e1; e[2] = e2; }
+    Vec3(const Vec3 &v) { e[0] = v[0]; e[1] = v[1]; e[2] = v[2]; }
     ~Vec3() {}
+
+    static Vec3 ColorBlack();
 
     inline float x() const { return e[0]; }
     inline float y() const { return e[1]; }
@@ -38,7 +41,7 @@ public:
     inline Vec3&        operator*=(const float t) { e[0] *=      t; e[1] *=      t; e[2] *=      t; return *this;}
     inline Vec3&        operator/=(const float t) { e[0] /=      t; e[1] /=      t; e[2] /=      t; return *this;}
    
-    inline float squared_length()   const   { return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];}
+    inline float squared_length()   const   { return e[0]*e[0] + e[1]*e[1] + e[2]*e[2]; }
     inline float length()           const   { return sqrtf(squared_length()); }
     inline void  make_unit_vector()         { *this /= length(); }
 };

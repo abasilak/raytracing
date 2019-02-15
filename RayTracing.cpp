@@ -24,7 +24,7 @@ compute_background_color(const Ray& ray)
 }
 
 Vec3
-compute_sample_color(const Ray& ray, ObjectList *list, int depth)
+compute_sample_color(const Ray& ray, Object *list, int depth)
 {
     hit_record_t _hit_record;
     if(list->Intersect(ray, MIN_INTERSECTION_T, MAXFLOAT, _hit_record)) {
@@ -34,7 +34,7 @@ compute_sample_color(const Ray& ray, ObjectList *list, int depth)
             return _attenuation * compute_sample_color(_scattered, list, depth+1);
         }
         else {
-            return Vec3(0.0f,0.0f,0.0f);
+            return Vec3::ColorBlack();
         }
     }
 

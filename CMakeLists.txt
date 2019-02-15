@@ -1,9 +1,11 @@
 # Sets the minimum required version of cmake for a project.
 # If the current version of CMake is lower than that required it will stop
 # processing the project.
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.3)
 
 project (RayTracing)
+
+message(STATUS "Building RayTracing Project")
 
 ### enable C++11 standard
 set (CMAKE_CXX_STANDARD 11) 
@@ -21,11 +23,15 @@ if (OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-add_definitions(-DEXECUTION_TIME_COMPUTATION)
+add_definitions(-DEXECUTION_TIME_COMPUTATION
+                -DRANDOM_SCENE
+               )
 
 # Create an executable binary
 add_executable(RayTracing
                Vec3.cpp
+               Aabb.cpp
+               BvhNode.cpp
                RayTracing.cpp
                Scene.cpp
                Image2D.cpp
@@ -34,5 +40,3 @@ add_executable(RayTracing
                Material.cpp
                ObjectList.cpp
                main.cpp)
-
-message(STATUS "Building RayTracing Project")

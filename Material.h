@@ -54,9 +54,9 @@ class Dielectric : public Material {
 private:
     float m_ref_idx;
 public:
-        explicit Dielectric(const Vec3& albedo, float ref_idx) : Material(albedo), m_ref_idx(ref_idx) { }
+    explicit Dielectric(const Vec3& albedo, float ref_idx) : Material(albedo), m_ref_idx(ref_idx) { }
 
-        virtual bool Scatter(const Ray& r_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const override;
+    virtual bool Scatter(const Ray& r_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const override;
 };
 
 

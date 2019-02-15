@@ -16,7 +16,7 @@ private:
     std::ofstream   m_image;
 
 public:
-    explicit Image2D(void) {};
+    explicit Image2D() {};
     explicit Image2D(const std::string &name, int width, int m_height);
     ~Image2D() {};
 

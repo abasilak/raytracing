@@ -3,6 +3,7 @@
 
 #include "Sphere.h"
 #include "ObjectList.h"
+#include "BvhNode.h"
 
 class Scene
 {
@@ -17,10 +18,11 @@ private:
 
 public:
 
+    explicit Scene() : m_materials(nullptr), m_materials_size(0), m_objects(nullptr), m_objects_size(0) { };
     explicit Scene(int materials_size, int objects_size);
-    ~Scene(void);
+    ~Scene();
 
-    ObjectList *Create(void);
+    Object *Create(void);
 };
 
 #endif 

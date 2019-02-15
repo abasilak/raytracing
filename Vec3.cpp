@@ -1,5 +1,11 @@
 #include "Vec3.h"
 
+Vec3 
+Vec3::ColorBlack()
+{ 
+    return Vec3(0.0f,0.0f,0.0f);
+}
+
 Vec3
 operator+(const Vec3 &v1, const Vec3 &v2) {
     return Vec3(v1.e[0] + v2.e[0], v1.e[1] + v2.e[1], v1.e[2] + v2.e[2]);

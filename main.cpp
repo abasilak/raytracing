@@ -24,7 +24,9 @@ int main (int argc, char *argv[])
     }
     _image->InitFile();
 
+#ifdef RANDOM_SCENE
     srand48(time(NULL));
+#endif
 
 // Camera
     const Vec3  _origin = Vec3(13.0f,  4.0f,  4.0f);
@@ -34,24 +36,30 @@ int main (int argc, char *argv[])
     const float _aspect = static_cast<float>(_width) / static_cast<float>(_height);
     const float _aperture       = 0.0f;
     const float _focus_distance = (_origin - _lookat).length();
+    const float _shutter_open   = 0.0f;;
+    const float _shutter_close  = 1.0f;;
 
-    Camera _camera(_origin, _lookat, _up, _fov, _aspect, _aperture, _focus_distance);
+    Camera _camera(_origin, _lookat, _up, _fov, _aspect, _aperture, _focus_distance, _shutter_open, _shutter_close);
 
 // Scene
     Scene  _scene(500,500);
 
-    ObjectList     *_objects_list = _scene.Create();
+    Object *_objects_list = _scene.Create();
 
 // Post-Processing
     const float _gamma = 0.5f;
+
+    std::cout << "\nRay Tracing Progress" << std::endl;
 
 #ifdef EXECUTION_TIME_COMPUTATION
     auto start = high_resolution_clock::now(); 
 #endif
 
-    std::cout << "\nRay Tracing Progress" << std::endl;
+/////////////////////////
+// Perform Ray Tracing //
+/////////////////////////
 
-// For each pixel
+// Initialization
     float _progress_i     = 0.0f;
     float _progress_total = _width*_height;
 
@@ -63,6 +71,7 @@ int main (int argc, char *argv[])
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2)
 #endif
+// For each pixel (in parallel)
     for(int j=_height-1; j>=0; --j) {
         for(int i=0; i<_width; ++i) {
             
@@ -89,19 +98,13 @@ int main (int argc, char *argv[])
         }
     }
 
-    // Write pixel color to image file
+// Write pixel colors to image file
     _image->WritePixel2File(_colors);
 
 #ifdef EXECUTION_TIME_COMPUTATION
     auto stop     = high_resolution_clock::now();
-
-// Subtract stop and start timepoints and cast it to required unit. 
-// Predefined units are nanoseconds, microseconds, milliseconds, 
-// seconds, minutes, hours. Use duration_cast() function. 
     auto duration = duration_cast<milliseconds>(stop - start); 
 
-// To get the value of duration use the count() 
-// member function on the duration object 
     std::cout << "\nImage '" << _name <<"' was successfully generated in " << duration.count() << " ms" << std::endl;
 #endif
 

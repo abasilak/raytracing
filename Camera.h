@@ -24,6 +24,7 @@ private:
 
 public:
 
+    explicit Camera() { };
     explicit Camera(const Vec3& origin, 
                     const Vec3& lower_left_corner,
                     const Vec3& horizontal,

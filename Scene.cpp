@@ -28,10 +28,11 @@ Scene::~Scene()
     safe_array_delete(m_objects);
 }
 
-ObjectList *
+Object *
 Scene::Create(void)
 {
     int i = 0;
+    
     for (int a = -11; a < 11; a++) {
         for (int b = -11; b < 11; b++) {
 
@@ -50,7 +51,7 @@ Scene::Create(void)
                     _material_type  = Material::Type::lambertian;
                     _albedo         = Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48());
                     _f              = 0.0f;
-                    _animated       = true;
+                    _animated       = false;
                 }
                 else if (_material_type_f < 0.95f) { 
                     _material_type  = Material::Type::metal;
@@ -89,5 +90,6 @@ Scene::Create(void)
     m_objects[i]   = new Sphere(Vec3( 4.0f, 1.0f, 0.0f), 1.0f, m_materials[i]);
     i++;
 
-    return new ObjectList(m_objects, i);
+    //return new ObjectList(m_objects, i);
+    return new BVH_Node(m_objects, i, 0.0f, 1.0f);
 }

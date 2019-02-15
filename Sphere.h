@@ -2,6 +2,7 @@
 #define __SPHERE_H__
 
 #include "Object.h"
+#include "Aabb.h"
 
 class Sphere : public Object {
 
@@ -21,6 +22,7 @@ public:
     ~Sphere() { m_material = nullptr; }
 
     virtual bool Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_record) const override;
+    virtual bool CreateBoundingBox(float t_start, float t_end, AABB& aabb) const override;
 
     Vec3     GetCenter(float t) const;
 };
