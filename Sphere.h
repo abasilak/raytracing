@@ -8,6 +8,7 @@ class Sphere : public Object {
 
 private:
     Vec3      m_center;
+    Vec3      m_center_end;
     float     m_radius;
     Material *m_material;
 
@@ -18,7 +19,8 @@ private:
 public:
     explicit Sphere() : m_material(nullptr), m_animated(false) { }
     explicit Sphere(const Vec3& center, float radius, Material *material, bool animated=false, float animation_start=0.0f, float animation_end=1.0f) :
-     m_center(center), m_radius(radius), m_material(material), m_animated(animated), m_animation_start(animation_start), m_animation_end(animation_end) { };
+     m_center(center), m_radius(radius), m_material(material), m_animated(animated), m_animation_start(animation_start), m_animation_end(animation_end)
+     { m_center_end = m_center + Vec3(0.0f, 2.0f*m_radius*drand48(), 0.0f); }; // random center at 't_end' time
     ~Sphere() { m_material = nullptr; }
 
     virtual bool Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_record) const override;

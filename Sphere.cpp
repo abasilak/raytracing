@@ -3,8 +3,6 @@
 Vec3
 Sphere::GetCenter(float t) const
 {
-    Vec3 m_center_end = m_center + Vec3(0.0f, 2.0f*m_radius*drand48(), 0.0f);
-
     return (!m_animated || (t <= m_animation_start)) ? m_center :
     m_center + ((std::min(t, m_animation_end) - m_animation_start)/(m_animation_end - m_animation_start)) * (m_center_end - m_center);
 }
@@ -53,10 +51,26 @@ Sphere::Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_re
 bool
 Sphere::CreateBoundingBox(float t_start, float t_end, AABB& aabb) const
 {
-    Vec3 _aabb_min = m_center - Vec3(m_radius, m_radius, m_radius);
-    Vec3 _aabb_max = m_center + Vec3(m_radius, m_radius, m_radius);
+    if(m_animated) {
+        Vec3 _center_start    = GetCenter(t_start);
+        Vec3 _aabb_start_min  = _center_start - Vec3(m_radius, m_radius, m_radius);
+        Vec3 _aabb_start_max  = _center_start + Vec3(m_radius, m_radius, m_radius);
+        AABB _aabb_start      = AABB(_aabb_start_min, _aabb_start_max);
 
-    aabb = AABB(_aabb_min,_aabb_max);
+        Vec3 _center_end      = GetCenter(t_end);
+        Vec3 _aabb_end_min    = _center_end - Vec3(m_radius, m_radius, m_radius);
+        Vec3 _aabb_end_max    = _center_end + Vec3(m_radius, m_radius, m_radius);
+        AABB _aabb_end        = AABB(_aabb_end_min, _aabb_end_max);
+
+        aabb = AABB::Merge(_aabb_start,_aabb_end);
+    }
+    else
+    {
+        Vec3 _aabb_min = m_center - Vec3(m_radius, m_radius, m_radius);
+        Vec3 _aabb_max = m_center + Vec3(m_radius, m_radius, m_radius);
+
+        aabb = AABB(_aabb_min,_aabb_max);
+    }
 
     return true;
 }
