@@ -29,11 +29,11 @@ int main (int argc, char *argv[])
 #endif
 
 // Camera
-    const Vec3  _origin = Vec3(13.0f,  4.0f,  4.0f);
-    const Vec3  _lookat = Vec3( 0.0f,  0.0f,  0.0f);
-    const Vec3  _up     = Vec3( 0.0f,  1.0f,  0.0f);
-    const float _fov    = 20.0f;
-    const float _aspect = static_cast<float>(_width) / static_cast<float>(_height);
+    const Vec3  _origin         = Vec3(13.0f,  4.0f,  4.0f);
+    const Vec3  _lookat         = Vec3( 0.0f,  0.0f,  0.0f);
+    const Vec3  _up             = Vec3( 0.0f,  1.0f,  0.0f);
+    const float _fov            = 20.0f;
+    const float _aspect         = static_cast<float>(_width) / static_cast<float>(_height);
     const float _aperture       = 0.0f;
     const float _focus_distance = (_origin - _lookat).length();
     const float _shutter_open   = 0.0f;;
@@ -43,7 +43,6 @@ int main (int argc, char *argv[])
 
 // Scene
     Scene  _scene(500,500);
-
     Object *_objects_list = _scene.Create();
 
 // Post-Processing
@@ -112,7 +111,7 @@ int main (int argc, char *argv[])
     
     safe_delete(_image);
     safe_delete(_objects_list);
-    
+
     for(int i=0; i<_width; ++i) {
         safe_array_delete(_colors[i]);
     }

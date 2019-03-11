@@ -91,5 +91,5 @@ Scene::Create(void)
     i++;
 
     //return new ObjectList(m_objects, i);
-    return new BVH_Node(m_objects, i, 0.0f, 1.0f);
+    return new BVH_Node(m_objects, i, 0.0f, 1.0f, true);
 }
