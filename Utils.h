@@ -1,10 +1,21 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include <stdio.h>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <assert.h>
 #include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#ifdef _WIN32
+#define RANDOM() (float)rand()/RAND_MAX
+#define INIT_RANDOM_GEN() srand((unsigned int)time(NULL));
+#else
+#define RANDOM() (float)drand48()
+#define INIT_RANDOM_GEN() srand48(time(NULL));
+#endif
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -40,7 +51,7 @@ inline
 float
 degrees_to_radians(float a)
 {
-    return a*(M_PI/180.0f);
+    return a*(static_cast<float>(M_PI)/180.0f);
 }
 
 template <typename T>

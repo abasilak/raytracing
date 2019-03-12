@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include "Vec3.h"
 
 Vec3 
@@ -64,8 +65,7 @@ random_in_unit_disk(void)
 {
     Vec3 _point;
     do {
-        
-        _point = 2.0f * Vec3(drand48(), drand48(), drand48()) - Vec3(1.0f, 1.0f, 1.0f);
+        _point = 2.0f * Vec3(RANDOM(), RANDOM(), RANDOM()) - Vec3(1.0f, 1.0f, 1.0f);
 
     } while (dot(_point,_point) >= 1.0f);
 
@@ -77,8 +77,7 @@ random_in_unit_disk_2(void)
 {
     Vec3 _point;
     do {
-        
-        _point = 2.0f * Vec3(drand48(), drand48(), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
+        _point = 2.0f * Vec3(RANDOM(), RANDOM(), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
 
     } while (dot(_point,_point) >= 1.0f);
 
@@ -96,7 +95,7 @@ refract(const Vec3& vector, const Vec3& normal, float ni_over_nt, Vec3& refracte
 {
     Vec3  _uv           = unit_vector(vector);
     float _dt           = dot(_uv, normal);
-    float _discriminant = 1.0 - ni_over_nt*ni_over_nt*(1-_dt*_dt);
+    float _discriminant = 1.0f - ni_over_nt*ni_over_nt*(1.0f-_dt*_dt);
 
     if (_discriminant > 0.0f) {
         refracted = ni_over_nt*(_uv - normal*_dt) - normal*sqrt(_discriminant);

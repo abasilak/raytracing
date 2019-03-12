@@ -1,5 +1,5 @@
-#include "RayTracing.h"
 #include "Utils.h"
+#include "RayTracing.h"
 
 #define MAX_DEPTH           50
 #define MIN_INTERSECTION_T  0.001f
@@ -27,7 +27,7 @@ Vec3
 compute_sample_color(const Ray& ray, Object *list, int depth)
 {
     hit_record_t _hit_record;
-    if(list->Intersect(ray, MIN_INTERSECTION_T, MAXFLOAT, _hit_record)) {
+    if(list->Intersect(ray, MIN_INTERSECTION_T, std::numeric_limits<float>::max(), _hit_record)) {
         Ray  _scattered;
         Vec3 _attenuation;
         if (depth < MAX_DEPTH && _hit_record.m_material->Scatter(ray, _hit_record, _attenuation, _scattered)) {

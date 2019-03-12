@@ -1,9 +1,9 @@
+#include "Utils.h"
 #include "RayTracing.h"
 #include "Sphere.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "Image2D.h"
-#include "Utils.h"
 
 int main (int argc, char *argv[])
 {
@@ -25,7 +25,7 @@ int main (int argc, char *argv[])
     _image->InitFile();
 
 #ifdef RANDOM_SCENE
-    srand48(time(NULL));
+	INIT_RANDOM_GEN();
 #endif
 
 // Camera
@@ -60,7 +60,7 @@ int main (int argc, char *argv[])
 
 // Initialization
     float _progress_i     = 0.0f;
-    float _progress_total = _width*_height;
+    float _progress_total = static_cast<float>(_width*_height);
 
     Vec3 **_colors = new Vec3 *[_width];
     for(int i=0; i<_width; ++i) {
@@ -68,7 +68,11 @@ int main (int argc, char *argv[])
     }
 
 #ifdef _OPENMP
+#ifdef _WIN32
+#pragma omp parallel for
+#else
 #pragma omp parallel for collapse(2)
+#endif
 #endif
 // For each pixel (in parallel)
     for(int j=_height-1; j>=0; --j) {
@@ -78,8 +82,8 @@ int main (int argc, char *argv[])
             for(int s=0; s<_samples; ++s) {
 
 // Compute pixel sample coords - UV
-                float _u = static_cast<float>(i + drand48()) / static_cast<float>(_width );
-                float _v = static_cast<float>(j + drand48()) / static_cast<float>(_height);
+                float _u = static_cast<float>(i + RANDOM()) / static_cast<float>(_width );
+                float _v = static_cast<float>(j + RANDOM()) / static_cast<float>(_height);
 
 // Compute ray that pass through each pixel
                 Ray  _ray = _camera.GetRay(_u, _v);

@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <algorithm>
 #include <iostream>
 
 class Vec3 {

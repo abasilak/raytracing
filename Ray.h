@@ -5,9 +5,7 @@
 
 class Ray
 {
-
 private:
-    
     Vec3  m_origin;
     Vec3  m_direction;
     float m_time;

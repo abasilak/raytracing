@@ -3,6 +3,7 @@
 
 #include "Ray.h"
 #include "Texture.h"
+#include "Ray.h"
 
 struct hit_record_t
 {

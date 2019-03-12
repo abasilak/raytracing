@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Image2D.h"
 #include "Utils.h"
 
 Scene::Scene(int materials_size, int textures_size, int objects_size)
@@ -66,27 +67,27 @@ Scene::Create(void)
     for (int a = -10; a < 10; a++) {
         for (int b = -10; b < 10; b++) {
 
-            float _radius = 0.25f*drand48();
-            Vec3  _origin(a + 0.9f*drand48(), _radius, b + 0.9f*drand48()); 
+            float _radius = 0.25f*RANDOM();
+            Vec3  _origin(a + 0.9f*RANDOM(), _radius, b + 0.9f*RANDOM());
 
             if ((_origin-Vec3(4.0f, _radius, 0.0f)).length() > 0.9f) {
                 
                 float           _f;
                 Vec3            _albedo;
                 Material::Type  _material_type;
-                float           _material_type_f = drand48();
+                float           _material_type_f = RANDOM();
                 bool            _animated;
 
                 if (_material_type_f < 0.8f) {
                     _material_type  = Material::Type::lambertian;
-                    _albedo         = Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48());
+                    _albedo         = Vec3(RANDOM()*RANDOM(), RANDOM()*RANDOM(), RANDOM()*RANDOM());
                     _f              = 0.0f;
                     _animated       = true;
                 }
                 else if (_material_type_f < 0.95f) { 
                     _material_type  = Material::Type::metal;
-                    _albedo         = Vec3(0.5f*(1.0f + drand48()), 0.5f*(1.0f + drand48()), 0.5f*(1.0f + drand48()));
-                    _f              = 0.5f*drand48();
+                    _albedo         = Vec3(0.5f*(1.0f + RANDOM()), 0.5f*(1.0f + RANDOM()), 0.5f*(1.0f + RANDOM()));
+                    _f              = 0.5f*RANDOM();
                     _animated       = true;
                 }
                 else

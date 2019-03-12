@@ -72,7 +72,7 @@ Dielectric::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuati
         _reflect_prob = schlick(cosine, m_ref_idx);
     }
 
-    Vec3  _scattered = (drand48() < _reflect_prob) ? _reflected : _refracted;
+    Vec3  _scattered = (RANDOM() < _reflect_prob) ? _reflected : _refracted;
     ray_out          = Ray(hit_record.m_point, _scattered, ray_in.GetTime());
     
     return true;

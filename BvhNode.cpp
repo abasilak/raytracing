@@ -1,5 +1,5 @@
-#include "BvhNode.h"
 #include "Utils.h"
+#include "BvhNode.h"
 #include <stdlib.h>
 
 BVH_Node::BVH_Node(Object **list, int size, float t_start, float t_end, bool is_root)

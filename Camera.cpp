@@ -1,5 +1,5 @@
-#include "Camera.h"
 #include "Utils.h"
+#include "Camera.h"
 
 Camera::Camera(const Vec3& origin, const Vec3& lower_left_corner,const Vec3& horizontal,const Vec3& vertical)
 : m_origin(origin), m_lower_left_corner(lower_left_corner), m_horizontal(horizontal), m_vertical(vertical)
@@ -32,7 +32,7 @@ Camera::GetRay(float s, float t) const
     Vec3  _rd     = (m_lens_radius > 0.0f) ? m_lens_radius * random_in_unit_disk() : Vec3(0.0f, 0.0f, 0.0f);
     Vec3  _offset = m_u * _rd.x() + m_v * _rd.y();
     Vec3  _origin = m_origin + _offset;
-    float _time   = m_time_open + drand48()*(m_time_close - m_time_open);
+    float _time   = m_time_open + RANDOM()*(m_time_close - m_time_open);
 
     return Ray(_origin, m_lower_left_corner + s*m_horizontal + t*m_vertical - _origin, _time);
 }
