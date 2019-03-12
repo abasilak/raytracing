@@ -30,6 +30,7 @@ Sphere::Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_re
             hit_record.m_point    = ray.GetPoint(_t);
             hit_record.m_normal   = (hit_record.m_point - _center) / m_radius;
             hit_record.m_material = m_material;
+			GetUV(hit_record.m_normal, hit_record.m_u, hit_record.m_v);
 
             return true;
         }
@@ -41,6 +42,7 @@ Sphere::Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_re
             hit_record.m_point    = ray.GetPoint(_t);
             hit_record.m_normal   = (hit_record.m_point - _center) / m_radius;
             hit_record.m_material = m_material;
+			GetUV(hit_record.m_normal, hit_record.m_u, hit_record.m_v);
 
             return true;
         }

@@ -1,13 +1,14 @@
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
 
-#include "Ray.h"
 #include "Texture.h"
 #include "Ray.h"
 
 struct hit_record_t
 {
     float           m_t;
+	float           m_u;
+	float           m_v;
     Vec3            m_point;
     Vec3            m_normal;
     class Material *m_material;

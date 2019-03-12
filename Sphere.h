@@ -28,6 +28,12 @@ public:
     virtual bool CreateBoundingBox(float t_start, float t_end, AABB& aabb) const override;
 
     Vec3     GetCenter(float t) const;
+	void	 GetUV(const Vec3& pos, float& u, float& v) const {
+		float phi   = atan2(pos.z(), pos.x());
+		float theta = asin(pos.y());
+		u = 1.0f - (phi + M_PI) / (2.0f * M_PI);
+		v = (theta + M_PI / 2.0f) / M_PI;
+	}
 };
 
 #endif

@@ -16,13 +16,9 @@ int main (int argc, char *argv[])
     const int         _width   = std::stoi(argv[1]);
     const int         _height  = std::stoi(argv[2]);
     const int         _samples = std::stoi(argv[3]);
-    const std::string _name    = std::string(argv[4]) + "_" + std::string(argv[1]) + "_" + std::string(argv[2]) + "_" + std::string(argv[3]) + std::string(IMAGE_EXT);
-
-    Image2D *_image = new Image2D(_name, _width, _height);
-    if(!_image->OpenFile()){
-        return 1;
-    }
-    _image->InitFile();
+	const std::string _type    = std::string(argv[5]);
+    const std::string _name    = std::string(argv[4]) + "_" + std::string(argv[1]) + "_" + std::string(argv[2]) + "_" + std::string(argv[3]) + "." + _type;
+	Image2D		     *_image   = new Image2D(_name, _type, _width, _height);
 
 #ifdef RANDOM_SCENE
 	INIT_RANDOM_GEN();
@@ -110,9 +106,7 @@ int main (int argc, char *argv[])
 
     std::cout << "\nImage '" << _name <<"' was successfully generated in " << duration.count() << " ms" << std::endl;
 #endif
-
-    _image->CloseFile();
-    
+   
     safe_delete(_image);
     safe_delete(_objects_list);
 

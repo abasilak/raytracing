@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include "Material.h"
 
 float
@@ -28,7 +29,7 @@ Lambertian::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuati
     Vec3 _target = hit_record.m_point + hit_record.m_normal + random_in_unit_disk();
 
     ray_out      = Ray(hit_record.m_point, _target - hit_record.m_point, ray_in.GetTime());
-    attenuation  = m_albedo->GetValue(0.0f, 0.0f, hit_record.m_point);;
+    attenuation  = m_albedo->GetValue(hit_record.m_u, hit_record.m_v, hit_record.m_point);;
 
     return true;
 }
@@ -38,7 +39,7 @@ Metal::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, R
 {
     Vec3 _reflected = reflect(ray_in.GetDirection(), hit_record.m_normal);
     ray_out         = Ray(hit_record.m_point, _reflected + m_fuzz*random_in_unit_disk(), ray_in.GetTime());
-    attenuation     = m_albedo->GetValue(0.0f, 0.0f, hit_record.m_point);
+    attenuation     = m_albedo->GetValue(hit_record.m_u, hit_record.m_v, hit_record.m_point);
 
     return (dot(_reflected, hit_record.m_normal) > 0.0f);
 }
@@ -47,7 +48,7 @@ bool
 Dielectric::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const
 {
     Vec3 _reflected = reflect(ray_in.GetDirection(), hit_record.m_normal);
-    attenuation     = m_albedo->GetValue(0.0f, 0.0f, hit_record.m_point);
+    attenuation     = m_albedo->GetValue(hit_record.m_u, hit_record.m_v, hit_record.m_point);
     
     float angle;
     float cosine;

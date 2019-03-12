@@ -44,22 +44,28 @@ Scene::Create(void)
 {
     int i = 0;
     
-    m_textures[i]  = new ConstantTexture(Vec3(0.5f,0.5f,0.5f));
+	Texture *odd   = new SolidTexture(Vec3(RANDOM()*RANDOM(), RANDOM()*RANDOM(), RANDOM()*RANDOM()));
+	Texture *even  = new SolidTexture(Vec3(0.9f, 0.9f, 0.9f));
+
+	Image2D		  *tex_image = new Image2D();
+	unsigned char *tex_data = tex_image->LoadFile(std::string("../../earthmap.jpg"));
+
+    m_textures[i]  = new CheckerTexture(odd, even);
     m_materials[i] = new Lambertian(m_textures[i]);
     m_objects[i]   = new Sphere(Vec3(0.0f,-1000.0f,0.0f), 1000.0f, m_materials[i]);
     i++;
 
-    m_textures[i]  = new ConstantTexture(Vec3(1.0f,1.0f,1.0f));
+    m_textures[i]  = new SolidTexture(Vec3(1.0f,1.0f,1.0f));
     m_materials[i] = new Dielectric(m_textures[i], 1.5f);
     m_objects[i]   = new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0f, m_materials[i]);
     i++;
 
-    m_textures[i]  = new ConstantTexture(Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48()));
+	m_textures[i]  = new ImageTexture(tex_image->GetWidth(), tex_image->GetHeight(), tex_data);
     m_materials[i] = new Lambertian(m_textures[i]);
     m_objects[i]   = new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, m_materials[i]);
     i++;
 
-    m_textures[i]  = new ConstantTexture(Vec3(0.7f, 0.6f, 0.5f));
+    m_textures[i]  = new SolidTexture(Vec3(0.7f, 0.6f, 0.5f));
     m_materials[i] = new Metal(m_textures[i], 0.0f);
     m_objects[i]   = new Sphere(Vec3( 4.0f, 1.0f, 0.0f), 1.0f, m_materials[i]);
     i++;
@@ -98,7 +104,7 @@ Scene::Create(void)
                     _animated       = true;
                 }
 
-                m_textures[i]  = new ConstantTexture(_albedo);
+                m_textures[i]  = new SolidTexture(_albedo);
                 m_materials[i] = Material::Create(_material_type, m_textures[i], _f);
                 m_objects[i]   = new Sphere(_origin, _radius, m_materials[i], _animated);
                 i++;
@@ -111,6 +117,8 @@ Scene::Create(void)
             break;
     }
     
+	safe_delete(tex_image);
+
     //return new ObjectList(m_objects, i);
     return new BVH_Node(m_objects, i, 0.0f, 1.0f, true);
 }
