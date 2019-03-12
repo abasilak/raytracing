@@ -7,7 +7,7 @@
 class Object {
 
 public:
-    virtual ~Object() {} ;
+    virtual ~Object() {};
     
     virtual bool Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_record) const = 0;
     virtual bool CreateBoundingBox(float t_start, float t_end, AABB& aabb) const = 0;

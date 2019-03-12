@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
     Camera _camera(_origin, _lookat, _up, _fov, _aspect, _aperture, _focus_distance, _shutter_open, _shutter_close);
 
 // Scene
-    Scene  _scene(500,500);
+    Scene  _scene(500,500,500);
     Object *_objects_list = _scene.Create();
 
 // Post-Processing
