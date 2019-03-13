@@ -2,6 +2,7 @@
 #define __SCENE_H__
 
 #include "Sphere.h"
+#include "Volume.h"
 #include "ObjectList.h"
 #include "BvhNode.h"
 

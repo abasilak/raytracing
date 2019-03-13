@@ -44,7 +44,7 @@ Scene::Create(void)
 {
     int i = 0;
     
-	Texture *odd   = new SolidTexture(Vec3(RANDOM()*RANDOM(), RANDOM()*RANDOM(), RANDOM()*RANDOM()));
+	Texture *odd   = new SolidTexture(Vec3(RANDOM_GEN()*RANDOM_GEN(), RANDOM_GEN()*RANDOM_GEN(), RANDOM_GEN()*RANDOM_GEN()));
 	Texture *even  = new SolidTexture(Vec3(0.9f, 0.9f, 0.9f));
 
 	Image2D		  *tex_image = new Image2D();
@@ -66,42 +66,48 @@ Scene::Create(void)
     i++;
 
     m_textures[i]  = new SolidTexture(Vec3(0.7f, 0.6f, 0.5f));
-    m_materials[i] = new Metal(m_textures[i], 0.0f);
-    m_objects[i]   = new Sphere(Vec3( 4.0f, 1.0f, 0.0f), 1.0f, m_materials[i]);
+    m_materials[i] = new Lambertian(m_textures[i]);
+	m_objects[i]   = new Volume(new Sphere(Vec3(4.0f, 1.0f, 0.0f), 1.0f, m_materials[i]), new SolidTexture(Vec3(1.0f, 1.0f, 1.0f)), 0.5f);
     i++;
 
     for (int a = -10; a < 10; a++) {
         for (int b = -10; b < 10; b++) {
 
-            float _radius = 0.25f*RANDOM();
-            Vec3  _origin(a + 0.9f*RANDOM(), _radius, b + 0.9f*RANDOM());
+            float _radius = 0.2f*RANDOM_GEN();
+            Vec3  _origin(a + 0.9f*RANDOM_GEN(), _radius, b + 0.9f*RANDOM_GEN());
 
             if ((_origin-Vec3(4.0f, _radius, 0.0f)).length() > 0.9f) {
                 
                 float           _f;
                 Vec3            _albedo;
                 Material::Type  _material_type;
-                float           _material_type_f = RANDOM();
+                float           _material_type_f = RANDOM_GEN();
                 bool            _animated;
 
-                if (_material_type_f < 0.8f) {
+				if (_material_type_f < 0.6f) {
+					_material_type  = Material::Type::diffuse_light;
+					_albedo			= Vec3(RANDOM_GEN()*RANDOM_GEN(), RANDOM_GEN()*RANDOM_GEN(), RANDOM_GEN()*RANDOM_GEN());
+					_f				= 0.0f;
+					_animated		= false;
+				}
+				else if (_material_type_f < 0.8f) {
                     _material_type  = Material::Type::lambertian;
-                    _albedo         = Vec3(RANDOM()*RANDOM(), RANDOM()*RANDOM(), RANDOM()*RANDOM());
+                    _albedo         = Vec3(RANDOM_GEN()*RANDOM_GEN(), RANDOM_GEN()*RANDOM_GEN(), RANDOM_GEN()*RANDOM_GEN());
                     _f              = 0.0f;
                     _animated       = true;
                 }
                 else if (_material_type_f < 0.95f) { 
                     _material_type  = Material::Type::metal;
-                    _albedo         = Vec3(0.5f*(1.0f + RANDOM()), 0.5f*(1.0f + RANDOM()), 0.5f*(1.0f + RANDOM()));
-                    _f              = 0.5f*RANDOM();
-                    _animated       = true;
+                    _albedo         = Vec3(0.5f*(1.0f + RANDOM_GEN()), 0.5f*(1.0f + RANDOM_GEN()), 0.5f*(1.0f + RANDOM_GEN()));
+                    _f              = 0.5f*RANDOM_GEN();
+                    _animated       = false;
                 }
                 else
                 {
                     _material_type  = Material::Type::dielectric;
                     _albedo         = Vec3(1.0f, 1.0f, 1.0f);
                     _f              = 1.5f;
-                    _animated       = true;
+                    _animated       = false;
                 }
 
                 m_textures[i]  = new SolidTexture(_albedo);
@@ -119,6 +125,9 @@ Scene::Create(void)
     
 	safe_delete(tex_image);
 
-    //return new ObjectList(m_objects, i);
-    return new BVH_Node(m_objects, i, 0.0f, 1.0f, true);
+#ifdef RT_USE_ADS
+	return new BVH_Node(m_objects, i, 0.0f, 1.0f, true);
+#else
+	return new ObjectList(m_objects, i);
+#endif
 }

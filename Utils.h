@@ -10,7 +10,7 @@
 #include <time.h>
 
 #ifdef _WIN32
-#define RANDOM() (float)rand()/RAND_MAX
+#define RANDOM_GEN() (float)rand()/RAND_MAX
 #define INIT_RANDOM_GEN() srand((unsigned int)time(NULL));
 #else
 #define RANDOM() (float)drand48()

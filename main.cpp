@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "RayTracing.h"
 #include "Sphere.h"
+#include "Volume.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "Image2D.h"
@@ -78,8 +79,8 @@ int main (int argc, char *argv[])
             for(int s=0; s<_samples; ++s) {
 
 // Compute pixel sample coords - UV
-                float _u = static_cast<float>(i + RANDOM()) / static_cast<float>(_width );
-                float _v = static_cast<float>(j + RANDOM()) / static_cast<float>(_height);
+                float _u = static_cast<float>(i + RANDOM_GEN()) / static_cast<float>(_width );
+                float _v = static_cast<float>(j + RANDOM_GEN()) / static_cast<float>(_height);
 
 // Compute ray that pass through each pixel
                 Ray  _ray = _camera.GetRay(_u, _v);

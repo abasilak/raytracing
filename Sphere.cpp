@@ -7,6 +7,14 @@ Sphere::GetCenter(float t) const
     m_center + ((std::min(t, m_animation_end) - m_animation_start)/(m_animation_end - m_animation_start)) * (m_center_end - m_center);
 }
 
+void	 
+Sphere::GetUV(const Vec3& pos, float& u, float& v) const {
+	float phi   = atan2(pos.z(), pos.x());
+	float theta = asin(pos.y());
+	u = 1.0f - (phi + M_PI) / (2.0f * M_PI);
+	v = (theta + M_PI / 2.0f) / M_PI;
+}
+
 bool
 Sphere::Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_record) const
 {

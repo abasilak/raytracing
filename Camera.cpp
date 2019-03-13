@@ -32,7 +32,7 @@ Camera::GetRay(float s, float t) const
     Vec3  _rd     = (m_lens_radius > 0.0f) ? m_lens_radius * random_in_unit_disk() : Vec3(0.0f, 0.0f, 0.0f);
     Vec3  _offset = m_u * _rd.x() + m_v * _rd.y();
     Vec3  _origin = m_origin + _offset;
-    float _time   = m_time_open + RANDOM()*(m_time_close - m_time_open);
+    float _time   = m_time_open + RANDOM_GEN()*(m_time_close - m_time_open);
 
     return Ray(_origin, m_lower_left_corner + s*m_horizontal + t*m_vertical - _origin, _time);
 }

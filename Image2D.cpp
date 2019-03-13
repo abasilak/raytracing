@@ -10,7 +10,7 @@ Image2D::Image2D(const std::string &name, const std::string &type, int width, in
 : m_name(name),
   m_width(width),
   m_height(height),
-  m_comp(3)
+  m_components(3)
 {
 	if (type == "PPM") {
 		m_type = FileType::PPM;
@@ -41,29 +41,25 @@ Image2D::OpenFile(void)
     return true;
 }
 
-void
-Image2D::InitFile(void)
-{
-	m_ofstream << "P3\n";
-	m_ofstream << m_width << " " << m_height << "\n";
-	m_ofstream << "255\n";
-}
-
 unsigned char *
 Image2D::LoadFile(const std::string &name)
 {
 	m_name = name;
-	return stbi_load(m_name.c_str(), &m_width, &m_height, &m_comp, 0);
+	return stbi_load(m_name.c_str(), &m_width, &m_height, &m_components, 0);
 }
 
 bool
 Image2D::WritePixel2File(Vec3 **colors)
 {
 	if (m_type == FileType::PPM) {
-		if (!OpenFile())
+		if (!OpenFile()) {
 			return false;
+		}
 
-		InitFile();
+		m_ofstream << "P3\n";
+		m_ofstream << m_width << " " << m_height << "\n";
+		m_ofstream << "255\n";
+
 		for (int j = m_height - 1; j >= 0; --j) {
 			for (int i = 0; i < m_width; ++i) {
 
@@ -80,13 +76,13 @@ Image2D::WritePixel2File(Vec3 **colors)
 	else {
 		unsigned char *output_image = FramebufferToArray(colors);
 		if (m_type == FileType::PNG) {
-			stbi_write_png(m_name.c_str(), m_width, m_height, m_comp, output_image, m_width * m_comp);
+			stbi_write_png(m_name.c_str(), m_width, m_height, m_components, output_image, m_width * m_components);
 		}
 		else if (m_type == FileType::BMP) {
-			stbi_write_bmp(m_name.c_str(), m_width, m_height, m_comp, output_image);
+			stbi_write_bmp(m_name.c_str(), m_width, m_height, m_components, output_image);
 		}
 		else if (m_type == FileType::TGA) {
-			stbi_write_tga(m_name.c_str(), m_width, m_height, m_comp, output_image);
+			stbi_write_tga(m_name.c_str(), m_width, m_height, m_components, output_image);
 		}
 		else if (m_type == FileType::HDR) {
 			//tbi_write_hdr(m_name.c_str(), m_width, m_height, 3, output_image);
@@ -108,12 +104,12 @@ Image2D::FramebufferToArray(Vec3 **framebuffer)
 	int width = static_cast<int>(m_width);
 	int height = static_cast<int>(m_height);
 
-	unsigned char *output = new unsigned char[width * height * m_comp];
+	unsigned char *output = new unsigned char[width * height * m_components];
 	unsigned char *output_ptr = output;
 
 	for (int j = height - 1; j >= 0; --j)
 	{
-		unsigned char *temp = new unsigned char[m_comp * width];
+		unsigned char *temp = new unsigned char[m_components * width];
 		unsigned char *temp_ptr = temp;
 
 		for (int i = 0; i < width; ++i)
@@ -122,12 +118,12 @@ Image2D::FramebufferToArray(Vec3 **framebuffer)
 			rgb[0] = (unsigned char)(255.99 * framebuffer[i][j].x());
 			rgb[1] = (unsigned char)(255.99 * framebuffer[i][j].y());
 			rgb[2] = (unsigned char)(255.99 * framebuffer[i][j].z());
-			std::copy(rgb, rgb + m_comp, temp_ptr);
-			temp_ptr += m_comp;
+			std::copy(rgb, rgb + m_components, temp_ptr);
+			temp_ptr += m_components;
 		}
 
-		std::copy(temp, temp + (width * m_comp), output_ptr);
-		output_ptr += width * m_comp;
+		std::copy(temp, temp + (width * m_components), output_ptr);
+		output_ptr += width * m_components;
 		delete[] temp;
 	}
 

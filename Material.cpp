@@ -10,17 +10,20 @@ schlick(float cosine, float ref_idx)
 }
 
 Material *
-Material::Create(Material::Type type, Texture *albedo, float f)
+Material::Create(Material::Type type, Texture *tex, float f)
 {
-    if (type == Material::lambertian) {
-        return new Lambertian(albedo);
+    if (type == Type::lambertian) {
+        return new Lambertian(tex);
     }
-    else if (type == Material::metal) {
-        return new Metal(albedo, f);
+    else if (type == Type::metal) {
+        return new Metal(tex, f);
     }
-    else {
-        return new Dielectric(albedo, f);
+    else if (type == Type::dielectric) {
+        return new Dielectric(tex, f);
     }
+	else {
+		return new DiffuseLight(tex);
+	}
 }
 
 bool
@@ -73,8 +76,17 @@ Dielectric::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuati
         _reflect_prob = schlick(cosine, m_ref_idx);
     }
 
-    Vec3  _scattered = (RANDOM() < _reflect_prob) ? _reflected : _refracted;
+    Vec3  _scattered = (RANDOM_GEN() < _reflect_prob) ? _reflected : _refracted;
     ray_out          = Ray(hit_record.m_point, _scattered, ray_in.GetTime());
     
     return true;
+}
+
+bool
+Isotropic::Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const
+{
+	ray_out		= Ray(hit_record.m_point, random_in_unit_disk(), ray_in.GetTime());
+	attenuation = m_albedo->GetValue(hit_record.m_u, hit_record.m_v, hit_record.m_point);
+
+	return true;
 }

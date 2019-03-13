@@ -20,14 +20,27 @@ protected:
     Texture        *m_albedo;
 
 public:
-    enum Type { lambertian, metal, dielectric };
+    enum Type { lambertian, metal, dielectric, diffuse_light };
 
     explicit Material(Texture *albedo) : m_albedo(albedo) { }
     virtual ~Material() { }
 
-    static Material *Create(Material::Type type, Texture *albedo, float f);
+    static Material *Create(Material::Type type, Texture *tex, float f);
 
     virtual bool Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const = 0;
+	virtual Vec3 Emitted(const Vec3& pos, float& u, float& v) const { return Vec3::ColorBlack(); }
+};
+
+class DiffuseLight : public Material
+{
+private:
+	Texture        *m_emit;
+public:
+	explicit DiffuseLight(Texture *emit) : Material(nullptr), m_emit(emit) { }
+	~DiffuseLight() { }
+
+	virtual bool Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const override { return false; }
+	virtual Vec3 Emitted(const Vec3& pos, float& u, float& v) const override { return m_emit->GetValue(u, v, pos); }
 };
 
 class Lambertian : public Material
@@ -62,5 +75,14 @@ public:
     virtual bool Scatter(const Ray& r_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const override;
 };
 
+class Isotropic : public Material
+{
+
+public:
+	explicit Isotropic(Texture *albedo) : Material(albedo) { }
+	~Isotropic() { }
+
+	virtual bool Scatter(const Ray& ray_in, hit_record_t& hit_record, Vec3& attenuation, Ray& ray_out) const override;
+};
 
 #endif 

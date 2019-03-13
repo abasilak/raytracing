@@ -65,7 +65,7 @@ random_in_unit_disk(void)
 {
     Vec3 _point;
     do {
-        _point = 2.0f * Vec3(RANDOM(), RANDOM(), RANDOM()) - Vec3(1.0f, 1.0f, 1.0f);
+        _point = 2.0f * Vec3(RANDOM_GEN(), RANDOM_GEN(), RANDOM_GEN()) - Vec3(1.0f, 1.0f, 1.0f);
 
     } while (dot(_point,_point) >= 1.0f);
 
@@ -77,7 +77,7 @@ random_in_unit_disk_2(void)
 {
     Vec3 _point;
     do {
-        _point = 2.0f * Vec3(RANDOM(), RANDOM(), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
+        _point = 2.0f * Vec3(RANDOM_GEN(), RANDOM_GEN(), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
 
     } while (dot(_point,_point) >= 1.0f);
 

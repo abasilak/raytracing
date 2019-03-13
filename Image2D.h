@@ -14,7 +14,7 @@ private:
     std::string     m_name;
     int             m_width;
     int             m_height;
-	int				m_comp;
+	int				m_components;
     std::ofstream   m_ofstream;
 	FileType		m_type;
 
@@ -24,7 +24,6 @@ public:
     ~Image2D() {};
 
     bool			OpenFile(void);
-    void			InitFile(void);
 	unsigned char  *LoadFile(const std::string &name);
 	bool			WritePixel2File(Vec3 **colors);
     void			CloseFile(void);
@@ -32,7 +31,7 @@ public:
 
 	inline int		GetWidth(void)		 const { return m_width;  }
 	inline int		GetHeight(void)		 const { return m_height; }
-	inline int		GetComponents(void)  const { return m_comp;   }
+	inline int		GetComponents(void)  const { return m_components;   }
 };
 
 
