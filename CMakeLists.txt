@@ -39,4 +39,5 @@ add_executable(RayTracing
                Sphere.cpp
                Material.cpp
                ObjectList.cpp
+               Volume.cpp
                main.cpp)

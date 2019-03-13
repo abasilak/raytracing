@@ -2,6 +2,12 @@
 #include "Image2D.h"
 #include "Utils.h"
 
+#ifdef _WIN32
+#define TEXTURE_EARTH_PATH "../../earthmap.jpg"
+#else
+#define TEXTURE_EARTH_PATH "../earthmap.jpg"
+#endif
+
 Scene::Scene(int materials_size, int textures_size, int objects_size)
 : m_materials_size(materials_size), m_textures_size(textures_size) , m_objects_size(objects_size)
 {
@@ -48,7 +54,7 @@ Scene::Create(void)
 	Texture *even  = new SolidTexture(Vec3(0.9f, 0.9f, 0.9f));
 
 	Image2D		  *tex_image = new Image2D();
-	unsigned char *tex_data = tex_image->LoadFile(std::string("../../earthmap.jpg"));
+	unsigned char *tex_data = tex_image->LoadFile(std::string(TEXTURE_EARTH_PATH));
 
     m_textures[i]  = new CheckerTexture(odd, even);
     m_materials[i] = new Lambertian(m_textures[i]);

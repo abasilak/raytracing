@@ -13,7 +13,7 @@
 #define RANDOM_GEN() (float)rand()/RAND_MAX
 #define INIT_RANDOM_GEN() srand((unsigned int)time(NULL));
 #else
-#define RANDOM() (float)drand48()
+#define RANDOM_GEN() (float)drand48()
 #define INIT_RANDOM_GEN() srand48(time(NULL));
 #endif
 
