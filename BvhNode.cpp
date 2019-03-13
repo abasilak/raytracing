@@ -63,31 +63,17 @@ BVH_Node::Intersect(const Ray& ray, float t_min, float t_max, hit_record_t& hit_
 // if ray hits with Node's AABB
     if(m_aabb.Intersect(ray, t_min, t_max)) {
 
-// Check if ray hits with Left child node's AABB
-        hit_record_t _hit_record_left;
-        bool         _hit_node_left  = m_node_left->Intersect(ray, t_min, t_max, _hit_record_left);
-
-// Check if ray hits with Right child node's AABB
-        hit_record_t _hit_record_right;
-        bool         _hit_node_right = m_node_right->Intersect(ray, t_min, t_max, _hit_record_right);
-
-// if we have intersection with both nodes
-        if(_hit_node_left && _hit_node_right) {
-            hit_record = (_hit_record_left.m_t < _hit_record_right.m_t) ? _hit_record_left : _hit_record_right;
-            return true;
-        }
 // if we have intersection with left node
-        else if(_hit_node_left) {
-            hit_record = _hit_record_left;
+        if(m_node_left->Intersect(ray, t_min, t_max, hit_record)) {
+// if we have intersection with both nodes
+            m_node_right->Intersect(ray, t_min, hit_record.m_t, hit_record);
             return true;
-        }
+        } 
 // if we have intersection with right node
-        else if(_hit_node_right) {
-            hit_record = _hit_record_right;
-            return true;
+		else {
+            return m_node_right->Intersect(ray, t_min, t_max, hit_record);
         }
-    }
-
+    }        
     return false;
 }
 
