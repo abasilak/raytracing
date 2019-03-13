@@ -7,7 +7,6 @@
 class BVH_Node : public Object {
 
 private:
-
     AABB         m_aabb;
     Object      *m_node_left;
     Object      *m_node_right;

@@ -6,7 +6,6 @@
 class AABB {
 
 private:
-
     Vec3      m_min;
     Vec3      m_max;
 

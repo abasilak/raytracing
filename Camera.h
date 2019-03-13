@@ -6,7 +6,6 @@
 class Camera {
 
 private:
-
 // Properties
     Vec3  m_origin;
     Vec3  m_lower_left_corner;
@@ -24,7 +23,6 @@ private:
     float m_time_close;
 
 public:
-
     explicit Camera() { };
     explicit Camera(const Vec3& origin, 
                     const Vec3& lower_left_corner,
